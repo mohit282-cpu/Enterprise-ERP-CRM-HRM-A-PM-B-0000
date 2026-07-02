@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Master Reports Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-</head>
-<body class="bg-light">
-    <div class="container-fluid mt-4 px-4">
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="container-fluid mt-4 px-4">
         <h2>Enterprise Reports Hub</h2>
         
         <div class="row mt-4">
@@ -43,5 +38,7 @@
                 });
         });
     </script>
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+</div>

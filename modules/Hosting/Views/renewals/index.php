@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hosting Renewals</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container mt-4">
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="container mt-4">
         <h2>Upcoming Hosting Renewals (30 Days)</h2>
         <div class="card shadow-sm mt-4 p-4">
             <table class="table table-hover">
@@ -30,7 +26,7 @@
                             <td><strong><?= htmlspecialchars($r['domain_name']) ?></strong></td>
                             <td><?= htmlspecialchars($r['plan_name']) ?></td>
                             <td><?= htmlspecialchars($r['next_renewal_date']) ?></td>
-                            <td>$<?= htmlspecialchars($r['annual_price']) ?></td>
+                            <td>Rs. <?= htmlspecialchars($r['annual_price']) ?></td>
                             <td><button class="btn btn-sm btn-primary">Generate Invoice</button></td>
                         </tr>
                         <?php endforeach; ?>
@@ -39,5 +35,7 @@
             </table>
         </div>
     </div>
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+</div>

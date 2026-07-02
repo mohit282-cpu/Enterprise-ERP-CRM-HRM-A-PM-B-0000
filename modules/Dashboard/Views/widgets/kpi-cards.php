@@ -3,7 +3,7 @@
         <div class="card border-left-primary shadow-sm h-100 py-2">
             <div class="card-body">
                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Revenue</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">$<?= number_format($kpi['total_revenue'], 2) ?></div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. <?= number_format($kpi['total_revenue'], 2) ?></div>
             </div>
         </div>
     </div>

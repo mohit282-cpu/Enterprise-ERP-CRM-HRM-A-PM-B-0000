@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sovryx OS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/auth.css">
-</head>
-<body class="bg-light d-flex align-items-center py-4">
-    <main class="form-signin w-100 m-auto">
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <main class="form-signin w-100 m-auto">
         <form method="POST" action="/login">
             <h1 class="h3 mb-3 fw-normal text-center">Sovryx OS</h1>
             
@@ -36,5 +30,7 @@
             <p class="mt-5 mb-3 text-muted text-center">&copy; Sovryx Tech 2026</p>
         </form>
     </main>
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+</div>

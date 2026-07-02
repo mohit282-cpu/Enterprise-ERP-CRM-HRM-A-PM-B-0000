@@ -17,6 +17,9 @@ class MockPDO {
     public function prepare($sql) {
         return new MockStatement();
     }
+    public function query($sql) {
+        return new MockStatement();
+    }
     public function beginTransaction() {}
     public function commit() {}
     public function rollBack() {}
