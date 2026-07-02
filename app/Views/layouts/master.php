@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -69,6 +69,11 @@
                             <button class="btn btn-icon btn-light rounded-circle shadow-none border-0" id="darkModeToggle">
                                 <i class="fas fa-moon text-muted"></i>
                             </button>
+                        </li>
+                        <li class="nav-item me-4 d-none d-md-flex align-items-center">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-medium">
+                                <i class="fas fa-building me-1"></i> <?= htmlspecialchars(\App\Core\TenantContext::getInstance()->getTenantName() ?? 'No Tenant') ?>
+                            </span>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link p-0 d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">

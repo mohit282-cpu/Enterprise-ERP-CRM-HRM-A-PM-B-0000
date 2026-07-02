@@ -17,7 +17,7 @@ class Router {
         // Hardcoded basic routes mapping URI prefixes to Controllers for UI testing
         $routes = [
             '/dashboard' => ['controller' => 'Modules\Dashboard\Controllers\DashboardController', 'method' => 'index', 'module' => 'Dashboard'],
-            '/crm/leads' => ['controller' => 'Modules\CRM\Controllers\LeadController', 'method' => 'index', 'module' => 'CRM'],
+            '/crm/leads' => ['controller' => 'Modules\CRM\Controllers\LeadController', 'method' => 'kanban', 'module' => 'CRM'],
             '/projects' => ['controller' => 'Modules\Projects\Controllers\ProjectController', 'method' => 'index', 'module' => 'Projects'],
             '/accounting' => ['controller' => 'Modules\Accounting\Controllers\DashboardController', 'method' => 'index', 'module' => 'Accounting'],
             '/billing/invoices' => ['controller' => 'Modules\Billing\Controllers\InvoiceController', 'method' => 'index', 'module' => 'Billing'],
@@ -54,8 +54,8 @@ class Router {
 
         // 404 Not Found Fallback
         http_response_code(404);
-        require __DIR__ . '/../Views/layouts/master.php'; // Render inside master layout if possible
-        echo "<h2>404 - Module or Route Not Found ($uri)</h2>";
+        $content = "<div class='text-center py-5'><h2 class='text-danger fw-bold'>404 - Module or Route Not Found</h2><p class='text-muted'>$uri could not be resolved by the router.</p></div>";
+        require __DIR__ . '/../Views/layouts/master.php';
     }
 
     private function sendJsonError($message, $code) {
