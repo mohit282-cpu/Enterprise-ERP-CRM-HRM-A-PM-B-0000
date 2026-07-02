@@ -26,4 +26,29 @@ class DomainRepository extends BaseRepository {
         $stmt = $db->prepare("INSERT INTO domain_names ($columns) VALUES ($placeholders)");
         return $stmt->execute(array_values($data));
     }
+
+    public function update(int $id, array $data) {
+        $db = Database::getInstance();
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        
+        $setClauses = [];
+        foreach ($data as $key => $val) {
+            $setClauses[] = "$key = ?";
+        }
+        $setString = implode(', ', $setClauses);
+        
+        $stmt = $db->prepare("UPDATE domain_names SET $setString WHERE id = ? AND tenant_id = ?");
+        $values = array_values($data);
+        $values[] = $id;
+        $values[] = $tenantId;
+        
+        return $stmt->execute($values);
+    }
+    
+    public function delete(int $id) {
+        $db = Database::getInstance();
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        $stmt = $db->prepare("DELETE FROM domain_names WHERE id = ? AND tenant_id = ?");
+        return $stmt->execute([$id, $tenantId]);
+    }
 }

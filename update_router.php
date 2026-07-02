@@ -1,21 +1,10 @@
 <?php
-namespace App\Core;
+$routerPath = __DIR__ . '/app/Core/Router.php';
+$content = file_get_contents($routerPath);
 
-class Router {
-    
-    public function dispatch(string $uri, string $method) {
-        // Strip query string
-        $uri = explode('?', $uri)[0];
-        $uri = rtrim($uri, '/');
-        
-        // Root redirect
-        if ($uri === '' || $uri === '/') {
-            header("Location: /dashboard");
-            exit;
-        }
-
-        // Hardcoded basic routes mapping URI prefixes to Controllers for UI testing
-                $routes = [
+// Define exactly what the new routes array should look like.
+$newRoutes = <<<PHP
+        \$routes = [
             '/login' => [
                 'GET' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'loginView', 'module' => 'Security'],
                 'POST' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'login', 'module' => 'Security']
@@ -112,55 +101,9 @@ class Router {
             '/security' => [
                 'GET' => ['controller' => 'Modules\Security\Controllers\SecurityCenterController', 'method' => 'index', 'module' => 'Security']
             ],
-        ];;
+        ];
+PHP;
 
-        // API routing fallback
-        if (strpos($uri, '/api/') === 0) {
-            $this->sendJsonError('API Routing not yet implemented in mock router.', 501);
-            return;
-        }
-
-        // Check if route exists
-        if (array_key_exists($uri, $routes)) {
-            $target = $routes[$uri];
-            
-            // Check if route is method-specific (e.g. GET/POST)
-            if (isset($target[$method])) {
-                $target = $target[$method];
-            } elseif (isset($target["GET"]) || isset($target["POST"])) {
-                $this->sendJsonError("Method Not Allowed", 405);
-            }
-            
-            $controllerClass = $target['controller'];
-            $methodName = $target['method'];
-            
-            // Basic Auth Middleware
-            if ($uri !== '/login' && !isset($_SESSION['user_id'])) {
-                header("Location: /login");
-                exit;
-            }
-            
-            if (class_exists($controllerClass)) {
-                $container = new \App\Core\Container();
-                $controller = $container->resolve($controllerClass);
-                if (method_exists($controller, $methodName)) {
-                    // Execute the controller method
-                    $controller->$methodName();
-                    return;
-                }
-            }
-        }
-
-        // 404 Not Found Fallback
-        http_response_code(404);
-        $content = "<div class='text-center py-5'><h2 class='text-danger fw-bold'>404 - Module or Route Not Found</h2><p class='text-muted'>$uri could not be resolved by the router.</p></div>";
-        require __DIR__ . '/../Views/layouts/master.php';
-    }
-
-    private function sendJsonError($message, $code) {
-        http_response_code($code);
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => $message]);
-        exit;
-    }
-}
+$content = preg_replace('/\$routes = \[.*?\];/s', $newRoutes . ';', $content);
+file_put_contents($routerPath, $content);
+echo "Updated Router.php with update/delete routes.\n";

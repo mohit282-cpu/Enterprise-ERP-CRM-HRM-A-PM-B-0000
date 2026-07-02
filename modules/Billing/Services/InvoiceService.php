@@ -18,4 +18,12 @@ class InvoiceService extends BaseService {
     public function createRecord(array $data) {
         return $this->repo->create($data);
     }
+
+    public function updateRecord(int $id, array $data) {
+        return $this->repo->update($id, $data);
+    }
+    
+    public function deleteRecord(int $id) {
+        return $this->repo->delete($id);
+    }
 }

@@ -24,4 +24,23 @@ class ProductController extends BaseController {
             exit;
         }
     }
+
+    public function update() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            unset($_POST['id']);
+            $this->service->updateRecord((int)$id, $_POST);
+            header('Location: /inventory');
+            exit;
+        }
+    }
+    
+    public function destroy() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $this->service->deleteRecord((int)$id);
+            header('Location: /inventory');
+            exit;
+        }
+    }
 }

@@ -26,4 +26,29 @@ class AccountRepository extends BaseRepository {
         $stmt = $db->prepare("INSERT INTO accounts ($columns) VALUES ($placeholders)");
         return $stmt->execute(array_values($data));
     }
+
+    public function update(int $id, array $data) {
+        $db = Database::getInstance();
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        
+        $setClauses = [];
+        foreach ($data as $key => $val) {
+            $setClauses[] = "$key = ?";
+        }
+        $setString = implode(', ', $setClauses);
+        
+        $stmt = $db->prepare("UPDATE accounts SET $setString WHERE id = ? AND tenant_id = ?");
+        $values = array_values($data);
+        $values[] = $id;
+        $values[] = $tenantId;
+        
+        return $stmt->execute($values);
+    }
+    
+    public function delete(int $id) {
+        $db = Database::getInstance();
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        $stmt = $db->prepare("DELETE FROM accounts WHERE id = ? AND tenant_id = ?");
+        return $stmt->execute([$id, $tenantId]);
+    }
 }
