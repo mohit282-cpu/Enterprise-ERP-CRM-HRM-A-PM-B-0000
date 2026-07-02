@@ -1,0 +1,1 @@
+﻿<?php return [ 'GET /accounting/journal/create' => [Modules\Accounting\Controllers\JournalController::class, 'create'], 'POST /accounting/journal/create' => [Modules\Accounting\Controllers\JournalController::class, 'create'] ];
