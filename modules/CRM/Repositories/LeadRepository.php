@@ -19,4 +19,16 @@ class LeadRepository extends BaseRepository {
             return [];
         }
     }
+
+    public function create(array $data) {
+        $db = Database::getInstance();
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        $data['tenant_id'] = $tenantId;
+        
+        $columns = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_fill(0, count($data), '?'));
+        
+        $stmt = $db->prepare("INSERT INTO crm_leads ($columns) VALUES ($placeholders)");
+        return $stmt->execute(array_values($data));
+    }
 }

@@ -15,4 +15,13 @@ class ProductController extends BaseController {
         $data = $this->service->getAllRecords();
         return $this->view('products/index', ['products' => $data], 'Inventory');
     }
+
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = $_POST;
+            $this->service->createRecord($data);
+            header('Location: /inventory');
+            exit;
+        }
+    }
 }

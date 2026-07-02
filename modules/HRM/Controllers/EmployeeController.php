@@ -15,4 +15,13 @@ class EmployeeController extends BaseController {
         $data = $this->service->getAllRecords();
         return $this->view('employees/index', ['employees' => $data], 'HRM');
     }
+
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = $_POST;
+            $this->service->createRecord($data);
+            header('Location: /hrm/employees');
+            exit;
+        }
+    }
 }

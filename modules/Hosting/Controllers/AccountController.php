@@ -15,4 +15,13 @@ class AccountController extends BaseController {
         $data = $this->service->getAllRecords();
         return $this->view('accounts/index', ['accounts' => $data], 'Hosting');
     }
+
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = $_POST;
+            $this->service->createRecord($data);
+            header('Location: /hosting/accounts');
+            exit;
+        }
+    }
 }

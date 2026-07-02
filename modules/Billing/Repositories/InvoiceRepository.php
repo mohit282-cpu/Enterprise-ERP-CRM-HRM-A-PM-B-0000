@@ -14,4 +14,16 @@ class InvoiceRepository extends BaseRepository {
         $stmt->execute([$tenantId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function create(array $data) {
+        $db = Database::getInstance();
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        $data['tenant_id'] = $tenantId;
+        
+        $columns = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_fill(0, count($data), '?'));
+        
+        $stmt = $db->prepare("INSERT INTO invoices ($columns) VALUES ($placeholders)");
+        return $stmt->execute(array_values($data));
+    }
 }

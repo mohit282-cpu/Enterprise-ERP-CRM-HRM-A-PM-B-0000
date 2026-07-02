@@ -16,22 +16,54 @@ class Router {
 
         // Hardcoded basic routes mapping URI prefixes to Controllers for UI testing
         $routes = [
-                        '/login' => [
+            '/login' => [
                 'GET' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'loginView', 'module' => 'Security'],
                 'POST' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'login', 'module' => 'Security']
             ],
-            '/logout' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'logout', 'module' => 'Security'],
-            '/dashboard' => ['controller' => 'Modules\Dashboard\Controllers\DashboardController', 'method' => 'index', 'module' => 'Dashboard'],
-            '/crm/leads' => ['controller' => 'Modules\CRM\Controllers\LeadController', 'method' => 'index', 'module' => 'CRM'],
-            '/projects' => ['controller' => 'Modules\Projects\Controllers\ProjectController', 'method' => 'index', 'module' => 'Projects'],
-            '/accounting' => ['controller' => 'Modules\Accounting\Controllers\DashboardController', 'method' => 'index', 'module' => 'Accounting'],
-            '/billing/invoices' => ['controller' => 'Modules\Billing\Controllers\InvoiceController', 'method' => 'index', 'module' => 'Billing'],
-            '/hrm/employees' => ['controller' => 'Modules\HRM\Controllers\EmployeeController', 'method' => 'index', 'module' => 'HRM'],
-            '/inventory' => ['controller' => 'Modules\Inventory\Controllers\ProductController', 'method' => 'index', 'module' => 'Inventory'],
-            '/hosting/accounts' => ['controller' => 'Modules\Hosting\Controllers\AccountController', 'method' => 'index', 'module' => 'Hosting'],
-            '/domains' => ['controller' => 'Modules\Domains\Controllers\DomainController', 'method' => 'index', 'module' => 'Domains'],
-            '/reports' => ['controller' => 'Modules\Reports\Controllers\ReportsController', 'method' => 'index', 'module' => 'Reports'],
-            '/security' => ['controller' => 'Modules\Security\Controllers\SecurityCenterController', 'method' => 'index', 'module' => 'Security'],
+            '/logout' => [
+                'GET' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'logout', 'module' => 'Security'],
+            ],
+            '/dashboard' => [
+                'GET' => ['controller' => 'Modules\Dashboard\Controllers\DashboardController', 'method' => 'index', 'module' => 'Dashboard'],
+            ],
+            '/crm/leads' => [
+                'GET' => ['controller' => 'Modules\CRM\Controllers\LeadController', 'method' => 'index', 'module' => 'CRM'],
+                'POST' => ['controller' => 'Modules\CRM\Controllers\LeadController', 'method' => 'store', 'module' => 'CRM']
+            ],
+            '/projects' => [
+                'GET' => ['controller' => 'Modules\Projects\Controllers\ProjectController', 'method' => 'index', 'module' => 'Projects'],
+                'POST' => ['controller' => 'Modules\Projects\Controllers\ProjectController', 'method' => 'store', 'module' => 'Projects']
+            ],
+            '/accounting' => [
+                'GET' => ['controller' => 'Modules\Accounting\Controllers\DashboardController', 'method' => 'index', 'module' => 'Accounting'],
+                'POST' => ['controller' => 'Modules\Accounting\Controllers\DashboardController', 'method' => 'store', 'module' => 'Accounting']
+            ],
+            '/billing/invoices' => [
+                'GET' => ['controller' => 'Modules\Billing\Controllers\InvoiceController', 'method' => 'index', 'module' => 'Billing'],
+                'POST' => ['controller' => 'Modules\Billing\Controllers\InvoiceController', 'method' => 'store', 'module' => 'Billing']
+            ],
+            '/hrm/employees' => [
+                'GET' => ['controller' => 'Modules\HRM\Controllers\EmployeeController', 'method' => 'index', 'module' => 'HRM'],
+                'POST' => ['controller' => 'Modules\HRM\Controllers\EmployeeController', 'method' => 'store', 'module' => 'HRM']
+            ],
+            '/inventory' => [
+                'GET' => ['controller' => 'Modules\Inventory\Controllers\ProductController', 'method' => 'index', 'module' => 'Inventory'],
+                'POST' => ['controller' => 'Modules\Inventory\Controllers\ProductController', 'method' => 'store', 'module' => 'Inventory']
+            ],
+            '/hosting/accounts' => [
+                'GET' => ['controller' => 'Modules\Hosting\Controllers\AccountController', 'method' => 'index', 'module' => 'Hosting'],
+                'POST' => ['controller' => 'Modules\Hosting\Controllers\AccountController', 'method' => 'store', 'module' => 'Hosting']
+            ],
+            '/domains' => [
+                'GET' => ['controller' => 'Modules\Domains\Controllers\DomainController', 'method' => 'index', 'module' => 'Domains'],
+                'POST' => ['controller' => 'Modules\Domains\Controllers\DomainController', 'method' => 'store', 'module' => 'Domains']
+            ],
+            '/reports' => [
+                'GET' => ['controller' => 'Modules\Reports\Controllers\ReportsController', 'method' => 'index', 'module' => 'Reports']
+            ],
+            '/security' => [
+                'GET' => ['controller' => 'Modules\Security\Controllers\SecurityCenterController', 'method' => 'index', 'module' => 'Security']
+            ],
         ];
 
         // API routing fallback

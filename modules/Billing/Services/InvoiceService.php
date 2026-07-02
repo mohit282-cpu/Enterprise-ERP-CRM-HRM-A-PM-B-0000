@@ -14,4 +14,8 @@ class InvoiceService extends BaseService {
     public function getAllRecords() {
         return $this->repo->getAll();
     }
+
+    public function createRecord(array $data) {
+        return $this->repo->create($data);
+    }
 }

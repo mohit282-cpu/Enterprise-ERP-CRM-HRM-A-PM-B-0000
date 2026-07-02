@@ -15,4 +15,13 @@ class LeadController extends BaseController {
         $data = $this->service->getAllRecords();
         return $this->view('leads/index', ['leads' => $data], 'CRM');
     }
+
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = $_POST;
+            $this->service->createRecord($data);
+            header('Location: /crm/leads');
+            exit;
+        }
+    }
 }
