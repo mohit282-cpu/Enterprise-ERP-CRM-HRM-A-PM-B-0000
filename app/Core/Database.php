@@ -1,33 +1,26 @@
 <?php
 namespace App\Core;
 
+use PDO;
+use PDOException;
+
 class Database {
     private static $instance = null;
     
-    // For Phase 1 UI Testing, we return a mock PDO-like object
-    public static function getInstance() {
+    public static function getInstance(): PDO {
         if (self::$instance === null) {
-            self::$instance = new MockPDO();
+            try {
+                $dbPath = __DIR__ . '/../../database/database.sqlite';
+                self::$instance = new PDO("sqlite:" . $dbPath);
+                self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                
+                // Enable foreign keys in SQLite
+                self::$instance->exec('PRAGMA foreign_keys = ON;');
+            } catch (PDOException $e) {
+                die("Database Connection Failed: " . $e->getMessage());
+            }
         }
         return self::$instance;
     }
-}
-
-class MockPDO {
-    public function prepare($sql) {
-        return new MockStatement();
-    }
-    public function query($sql) {
-        return new MockStatement();
-    }
-    public function beginTransaction() {}
-    public function commit() {}
-    public function rollBack() {}
-    public function lastInsertId() { return rand(1, 1000); }
-}
-
-class MockStatement {
-    public function execute($params = []) { return true; }
-    public function fetchAll($mode = null) { return []; }
-    public function fetch($mode = null) { return null; }
 }

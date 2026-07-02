@@ -16,6 +16,11 @@ class Router {
 
         // Hardcoded basic routes mapping URI prefixes to Controllers for UI testing
         $routes = [
+                        '/login' => [
+                'GET' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'loginView', 'module' => 'Security'],
+                'POST' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'login', 'module' => 'Security']
+            ],
+            '/logout' => ['controller' => 'Modules\Security\Controllers\AuthController', 'method' => 'logout', 'module' => 'Security'],
             '/dashboard' => ['controller' => 'Modules\Dashboard\Controllers\DashboardController', 'method' => 'index', 'module' => 'Dashboard'],
             '/crm/leads' => ['controller' => 'Modules\CRM\Controllers\LeadController', 'method' => 'kanban', 'module' => 'CRM'],
             '/projects' => ['controller' => 'Modules\Projects\Controllers\ProjectController', 'method' => 'index', 'module' => 'Projects'],
@@ -38,8 +43,22 @@ class Router {
         // Check if route exists
         if (array_key_exists($uri, $routes)) {
             $target = $routes[$uri];
+            
+            // Check if route is method-specific (e.g. GET/POST)
+            if (isset($target[$method])) {
+                $target = $target[$method];
+            } elseif (isset($target["GET"]) || isset($target["POST"])) {
+                $this->sendJsonError("Method Not Allowed", 405);
+            }
+            
             $controllerClass = $target['controller'];
             $methodName = $target['method'];
+            
+            // Basic Auth Middleware
+            if ($uri !== '/login' && !isset($_SESSION['user_id'])) {
+                header("Location: /login");
+                exit;
+            }
             
             if (class_exists($controllerClass)) {
                 $container = new \App\Core\Container();

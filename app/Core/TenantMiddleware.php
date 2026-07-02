@@ -1,5 +1,6 @@
 <?php
 namespace App\Core;
+use PDO;
 
 class TenantMiddleware {
     public static function handle() {
@@ -8,19 +9,22 @@ class TenantMiddleware {
         
         $subdomain = 'default';
         if (count($parts) > 1 && $host !== 'localhost:8000') {
-            $subdomain = $parts[0]; // e.g., acme.sovryx.com -> acme
+            $subdomain = $parts[0];
+        } else {
+            // Local fallback
+            $subdomain = 'acme';
         }
         
-        // In a real scenario, query the DB to resolve subdomain -> tenant_id
-        // Mock DB Resolution:
-        $mockTenants = [
-            'acme' => ['id' => 1, 'name' => 'Acme Corp'],
-            'stark' => ['id' => 2, 'name' => 'Stark Industries'],
-            'admin' => ['id' => 0, 'name' => 'Super Admin']
-        ];
+        $db = Database::getInstance();
+        $stmt = $db->prepare("SELECT id, name FROM tenants WHERE subdomain = ? LIMIT 1");
+        $stmt->execute([$subdomain]);
+        $tenantData = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        $tenantData = $mockTenants[$subdomain] ?? ['id' => 999, 'name' => 'Demo Tenant'];
-        
-        TenantContext::getInstance()->setTenant($tenantData['id'], $tenantData['name'], $subdomain);
+        if ($tenantData) {
+            TenantContext::getInstance()->setTenant($tenantData['id'], $tenantData['name'], $subdomain);
+        } else {
+            http_response_code(404);
+            die("Tenant not found for subdomain: " . htmlspecialchars($subdomain));
+        }
     }
 }
