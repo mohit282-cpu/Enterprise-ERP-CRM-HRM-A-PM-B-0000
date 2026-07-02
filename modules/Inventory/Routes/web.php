@@ -1,0 +1,1 @@
+﻿<?php return [ 'GET /inventory/stock/adjust' => [Modules\Inventory\Controllers\StockController::class, 'adjust'], 'POST /inventory/stock/adjust' => [Modules\Inventory\Controllers\StockController::class, 'adjust'] ];
