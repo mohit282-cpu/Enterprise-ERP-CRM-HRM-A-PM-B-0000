@@ -88,7 +88,7 @@ flowchart TD
     E -- No --> F[Return 'Invalid Credentials']
     E -- Yes --> G{Verify Password Hash}
     G -- Invalid --> F
-    G -- Valid --> H[Check Account Status (Active/Suspended)]
+    G -- Valid --> H["Check Account Status (Active/Suspended)"]
     H -- Suspended --> I[Return 'Account Suspended']
     H -- Active --> J[Regenerate Session ID]
     J --> K[Load User Roles & Permissions into Session]
@@ -159,11 +159,11 @@ Sovryx OS uses OpenAI's API to assist in drafting proposals, emails, and insight
 
 ```mermaid
 flowchart TD
-    A[User clicks 'Generate with AI'] --> B[Controller receives prompt & context]
-    B --> C[AiService formats context (Client Data, Project Scope)]
+    A["User clicks 'Generate with AI'"] --> B["Controller receives prompt & context"]
+    B --> C["AiService formats context (Client Data, Project Scope)"]
     C --> D[API Call to OpenAI]
     D --> E{Response OK?}
-    E -- No --> F[Log Error & Return Failure]
+    E -- No --> F["Log Error & Return Failure"]
     E -- Yes --> G[Parse AI Response]
     G --> H[Stream or Inject into UI Editor]
 ```
