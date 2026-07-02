@@ -58,6 +58,9 @@ spl_autoload_register(function ($class) {
 try {
     // Invoke Global Security Middleware (X-Frame-Options, CSRF checks)
     \App\Core\SecurityMiddleware::handle();
+    
+    // Resolve Tenant via Subdomain
+    \App\Core\TenantMiddleware::handle();
 
     // Parse URI and Dispatch
     $router = new \App\Core\Router();
