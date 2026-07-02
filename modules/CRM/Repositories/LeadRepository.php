@@ -1,59 +1,67 @@
 <?php
 namespace Modules\CRM\Repositories;
 
-use App\Core\BaseRepository;
 use App\Core\Database;
 use App\Core\TenantContext;
 use PDO;
 
-class LeadRepository extends BaseRepository {
+class LeadRepository {
+    private $db;
+
+    public function __construct() {
+        $this->db = Database::getInstance();
+    }
+
     public function getAll() {
-        $db = Database::getInstance();
-        try {
-            $tenantId = TenantContext::getInstance()->getTenantId();
-            // If table doesn't exist yet (like reports), just return empty array
-            $stmt = $db->prepare("SELECT * FROM crm_leads WHERE tenant_id = ? ORDER BY id DESC");
-            $stmt->execute([$tenantId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\Exception $e) {
-            return [];
-        }
+        $tenantId = TenantContext::getInstance()->getTenantId();
+        $stmt = $this->db->prepare("SELECT * FROM crm_leads WHERE tenant_id = ? ORDER BY created_at DESC");
+        $stmt->execute([$tenantId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function create(array $data) {
-        $db = Database::getInstance();
         $tenantId = TenantContext::getInstance()->getTenantId();
-        $data['tenant_id'] = $tenantId;
-        
-        $columns = implode(', ', array_keys($data));
-        $placeholders = implode(', ', array_fill(0, count($data), '?'));
-        
-        $stmt = $db->prepare("INSERT INTO crm_leads ($columns) VALUES ($placeholders)");
-        return $stmt->execute(array_values($data));
+        $stmt = $this->db->prepare("
+            INSERT INTO crm_leads (tenant_id, name, company, email, phone, source, expected_revenue, stage, notes) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([
+            $tenantId,
+            $data['name'] ?? '',
+            $data['company'] ?? null,
+            $data['email'] ?? '',
+            $data['phone'] ?? null,
+            $data['source'] ?? 'Organic',
+            $data['expected_revenue'] ?? 0.00,
+            $data['stage'] ?? 'New',
+            $data['notes'] ?? null
+        ]);
     }
 
     public function update(int $id, array $data) {
-        $db = Database::getInstance();
         $tenantId = TenantContext::getInstance()->getTenantId();
-        
-        $setClauses = [];
-        foreach ($data as $key => $val) {
-            $setClauses[] = "$key = ?";
-        }
-        $setString = implode(', ', $setClauses);
-        
-        $stmt = $db->prepare("UPDATE crm_leads SET $setString WHERE id = ? AND tenant_id = ?");
-        $values = array_values($data);
-        $values[] = $id;
-        $values[] = $tenantId;
-        
-        return $stmt->execute($values);
+        $stmt = $this->db->prepare("
+            UPDATE crm_leads 
+            SET name=?, company=?, email=?, phone=?, source=?, expected_revenue=?, stage=?, notes=? 
+            WHERE id=? AND tenant_id=?
+        ");
+        return $stmt->execute([
+            $data['name'] ?? '',
+            $data['company'] ?? null,
+            $data['email'] ?? '',
+            $data['phone'] ?? null,
+            $data['source'] ?? 'Organic',
+            $data['expected_revenue'] ?? 0.00,
+            $data['stage'] ?? 'New',
+            $data['notes'] ?? null,
+            $id,
+            $tenantId
+        ]);
     }
-    
+
     public function delete(int $id) {
-        $db = Database::getInstance();
         $tenantId = TenantContext::getInstance()->getTenantId();
-        $stmt = $db->prepare("DELETE FROM crm_leads WHERE id = ? AND tenant_id = ?");
+        $stmt = $this->db->prepare("DELETE FROM crm_leads WHERE id=? AND tenant_id=?");
         return $stmt->execute([$id, $tenantId]);
     }
 }

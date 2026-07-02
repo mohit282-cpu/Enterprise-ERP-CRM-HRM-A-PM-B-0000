@@ -50,7 +50,11 @@ CREATE TABLE IF NOT EXISTS crm_leads (
     name VARCHAR(255) NOT NULL,
     company VARCHAR(255),
     email VARCHAR(255),
-    stage VARCHAR(50) DEFAULT 'new',
+    phone VARCHAR(50),
+    source VARCHAR(50) DEFAULT 'Organic',
+    expected_revenue DECIMAL(15,2) DEFAULT 0.00,
+    stage VARCHAR(50) DEFAULT 'New',
+    notes TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
 );

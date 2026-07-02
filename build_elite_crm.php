@@ -1,3 +1,234 @@
+<?php
+$moduleDir = __DIR__ . '/modules/CRM';
+
+// Create missing directories
+$dirs = ['Models', 'Validators', 'Repositories', 'Services', 'Controllers', 'Views/leads', 'Tests'];
+foreach ($dirs as $dir) {
+    if (!is_dir($moduleDir . '/' . $dir)) {
+        mkdir($moduleDir . '/' . $dir, 0777, true);
+    }
+}
+
+// 1. Model
+$modelContent = <<<PHP
+<?php
+namespace Modules\CRM\Models;
+
+class Lead {
+    public \$id;
+    public \$tenant_id;
+    public \$name;
+    public \$company;
+    public \$email;
+    public \$phone;
+    public \$source;
+    public \$expected_revenue;
+    public \$stage;
+    public \$notes;
+    public \$created_at;
+}
+PHP;
+file_put_contents($moduleDir . '/Models/Lead.php', $modelContent);
+
+// 2. Validator
+$validatorContent = <<<PHP
+<?php
+namespace Modules\CRM\Validators;
+
+class LeadValidator {
+    public static function validate(array \$data) {
+        \$errors = [];
+        if (empty(\$data['name'])) \$errors[] = "Name is required.";
+        if (empty(\$data['email']) || !filter_var(\$data['email'], FILTER_VALIDATE_EMAIL)) \$errors[] = "Valid email is required.";
+        if (isset(\$data['expected_revenue']) && !is_numeric(\$data['expected_revenue'])) \$errors[] = "Expected revenue must be numeric.";
+        return \$errors;
+    }
+}
+PHP;
+file_put_contents($moduleDir . '/Validators/LeadValidator.php', $validatorContent);
+
+// 3. Repository
+$repoContent = <<<PHP
+<?php
+namespace Modules\CRM\Repositories;
+
+use App\Core\Database;
+use App\Core\TenantContext;
+use PDO;
+
+class LeadRepository {
+    private \$db;
+
+    public function __construct() {
+        \$this->db = Database::getInstance();
+    }
+
+    public function getAll() {
+        \$tenantId = TenantContext::getInstance()->getTenantId();
+        \$stmt = \$this->db->prepare("SELECT * FROM crm_leads WHERE tenant_id = ? ORDER BY created_at DESC");
+        \$stmt->execute([\$tenantId]);
+        return \$stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function create(array \$data) {
+        \$tenantId = TenantContext::getInstance()->getTenantId();
+        \$stmt = \$this->db->prepare("
+            INSERT INTO crm_leads (tenant_id, name, company, email, phone, source, expected_revenue, stage, notes) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        return \$stmt->execute([
+            \$tenantId,
+            \$data['name'] ?? '',
+            \$data['company'] ?? null,
+            \$data['email'] ?? '',
+            \$data['phone'] ?? null,
+            \$data['source'] ?? 'Organic',
+            \$data['expected_revenue'] ?? 0.00,
+            \$data['stage'] ?? 'New',
+            \$data['notes'] ?? null
+        ]);
+    }
+
+    public function update(int \$id, array \$data) {
+        \$tenantId = TenantContext::getInstance()->getTenantId();
+        \$stmt = \$this->db->prepare("
+            UPDATE crm_leads 
+            SET name=?, company=?, email=?, phone=?, source=?, expected_revenue=?, stage=?, notes=? 
+            WHERE id=? AND tenant_id=?
+        ");
+        return \$stmt->execute([
+            \$data['name'] ?? '',
+            \$data['company'] ?? null,
+            \$data['email'] ?? '',
+            \$data['phone'] ?? null,
+            \$data['source'] ?? 'Organic',
+            \$data['expected_revenue'] ?? 0.00,
+            \$data['stage'] ?? 'New',
+            \$data['notes'] ?? null,
+            \$id,
+            \$tenantId
+        ]);
+    }
+
+    public function delete(int \$id) {
+        \$tenantId = TenantContext::getInstance()->getTenantId();
+        \$stmt = \$this->db->prepare("DELETE FROM crm_leads WHERE id=? AND tenant_id=?");
+        return \$stmt->execute([\$id, \$tenantId]);
+    }
+}
+PHP;
+file_put_contents($moduleDir . '/Repositories/LeadRepository.php', $repoContent);
+
+// 4. Service
+$svcContent = <<<PHP
+<?php
+namespace Modules\CRM\Services;
+
+use Modules\CRM\Repositories\LeadRepository;
+use Modules\CRM\Validators\LeadValidator;
+use Exception;
+
+class LeadService {
+    private \$repo;
+
+    public function __construct() {
+        \$this->repo = new LeadRepository();
+    }
+
+    public function getLeads() {
+        return \$this->repo->getAll();
+    }
+
+    public function createLead(array \$data) {
+        \$errors = LeadValidator::validate(\$data);
+        if (!empty(\$errors)) {
+            throw new Exception(implode(', ', \$errors));
+        }
+        return \$this->repo->create(\$data);
+    }
+
+    public function updateLead(int \$id, array \$data) {
+        \$errors = LeadValidator::validate(\$data);
+        if (!empty(\$errors)) {
+            throw new Exception(implode(', ', \$errors));
+        }
+        return \$this->repo->update(\$id, \$data);
+    }
+
+    public function deleteLead(int \$id) {
+        return \$this->repo->delete(\$id);
+    }
+}
+PHP;
+file_put_contents($moduleDir . '/Services/LeadService.php', $svcContent);
+
+// 5. Controller
+$ctrlContent = <<<PHP
+<?php
+namespace Modules\CRM\Controllers;
+
+use App\Core\BaseController;
+use Modules\CRM\Services\LeadService;
+
+class LeadController extends BaseController {
+    private \$service;
+
+    public function __construct() {
+        \$this->service = new LeadService();
+    }
+
+    public function index() {
+        \$leads = \$this->service->getLeads();
+        // Calculate pipeline metrics
+        \$metrics = [
+            'total' => count(\$leads),
+            'new' => count(array_filter(\$leads, fn(\$l) => strtolower(\$l['stage']) === 'new')),
+            'won' => count(array_filter(\$leads, fn(\$l) => strtolower(\$l['stage']) === 'won')),
+            'revenue' => array_sum(array_column(\$leads, 'expected_revenue'))
+        ];
+        return \$this->view('index', ['leads' => \$leads, 'metrics' => \$metrics], 'CRM');
+    }
+
+    public function store() {
+        if (\$_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                \$this->service->createLead(\$_POST);
+                // Here we would set a flash message
+            } catch (\Exception \$e) {
+                // Here we would log the error and set an error flash message
+            }
+            header('Location: /crm/leads');
+            exit;
+        }
+    }
+
+    public function update() {
+        if (\$_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                \$id = \$_POST['id'];
+                unset(\$_POST['id']);
+                \$this->service->updateLead((int)\$id, \$_POST);
+            } catch (\Exception \$e) {
+                // Handle error
+            }
+            header('Location: /crm/leads');
+            exit;
+        }
+    }
+
+    public function destroy() {
+        if (\$_SERVER['REQUEST_METHOD'] === 'POST') {
+            \$this->service->deleteLead((int)\$_POST['id']);
+            header('Location: /crm/leads');
+            exit;
+        }
+    }
+}
+PHP;
+file_put_contents($moduleDir . '/Controllers/LeadController.php', $ctrlContent);
+
+// 6. View
+$viewContent = <<<PHP
 <div class="container-fluid">
     <!-- Header -->
     <div class="row mb-4 align-items-center">
@@ -20,7 +251,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Leads</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $metrics['total'] ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= \$metrics['total'] ?></div>
                         </div>
                         <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
                     </div>
@@ -33,7 +264,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Won Deals</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $metrics['won'] ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= \$metrics['won'] ?></div>
                         </div>
                         <div class="col-auto"><i class="fas fa-trophy fa-2x text-gray-300"></i></div>
                     </div>
@@ -46,7 +277,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">New Pipeline</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $metrics['new'] ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= \$metrics['new'] ?></div>
                         </div>
                         <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
                     </div>
@@ -59,7 +290,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Expected Revenue</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$<?= number_format($metrics['revenue'], 2) ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">\$<?= number_format(\$metrics['revenue'], 2) ?></div>
                         </div>
                         <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
                     </div>
@@ -88,26 +319,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($leads as $row): ?>
+                        <?php foreach (\$leads as \$row): ?>
                         <tr>
-                            <td class="fw-bold"><?= htmlspecialchars($row['name']) ?></td>
-                            <td><?= htmlspecialchars($row['company'] ?? '-') ?></td>
-                            <td><a href="mailto:<?= htmlspecialchars($row['email']) ?>"><?= htmlspecialchars($row['email']) ?></a></td>
-                            <td><span class="badge bg-secondary"><?= htmlspecialchars($row['source']) ?></span></td>
+                            <td class="fw-bold"><?= htmlspecialchars(\$row['name']) ?></td>
+                            <td><?= htmlspecialchars(\$row['company'] ?? '-') ?></td>
+                            <td><a href="mailto:<?= htmlspecialchars(\$row['email']) ?>"><?= htmlspecialchars(\$row['email']) ?></a></td>
+                            <td><span class="badge bg-secondary"><?= htmlspecialchars(\$row['source']) ?></span></td>
                             <td>
                                 <?php 
-                                    $stageClass = 'bg-primary';
-                                    if(strtolower($row['stage']) == 'won') $stageClass = 'bg-success';
-                                    if(strtolower($row['stage']) == 'lost') $stageClass = 'bg-danger';
-                                    if(strtolower($row['stage']) == 'qualified') $stageClass = 'bg-info';
+                                    \$stageClass = 'bg-primary';
+                                    if(strtolower(\$row['stage']) == 'won') \$stageClass = 'bg-success';
+                                    if(strtolower(\$row['stage']) == 'lost') \$stageClass = 'bg-danger';
+                                    if(strtolower(\$row['stage']) == 'qualified') \$stageClass = 'bg-info';
                                 ?>
-                                <span class="badge <?= $stageClass ?>"><?= htmlspecialchars(ucfirst($row['stage'])) ?></span>
+                                <span class="badge <?= \$stageClass ?>"><?= htmlspecialchars(ucfirst(\$row['stage'])) ?></span>
                             </td>
-                            <td>$<?= number_format($row['expected_revenue'], 2) ?></td>
+                            <td>\$<?= number_format(\$row['expected_revenue'], 2) ?></td>
                             <td class="text-end">
-                                <button onclick='openModal(<?= json_encode($row) ?>)' class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-edit"></i></button>
+                                <button onclick='openModal(<?= json_encode(\$row) ?>)' class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-edit"></i></button>
                                 <form method="POST" action="/crm/leads/delete" class="d-inline">
-                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                    <input type="hidden" name="id" value="<?= \$row['id'] ?>">
                                     <button type="submit" class="btn btn-sm btn-light text-danger" onclick="return confirm('Delete this lead permanently?')"><i class="fas fa-trash"></i></button>
                                 </form>
                             </td>
@@ -174,7 +405,7 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label fw-bold">Expected Rev. ($)</label>
+                            <label class="form-label fw-bold">Expected Rev. (\$)</label>
                             <input type="number" step="0.01" name="expected_revenue" id="form_expected_revenue" class="form-control" value="0.00">
                         </div>
                     </div>
@@ -220,3 +451,35 @@
         }
     }
 </script>
+PHP;
+file_put_contents($moduleDir . '/Views/leads/index.php', $viewContent);
+
+// 7. Docs
+$docsContent = <<<MD
+# CRM Module (Elite Standard)
+
+## Business Requirements
+- Complete management of Sales Pipeline.
+- Multi-tenant data isolation.
+- Lead lifecycle tracking (New -> Won/Lost).
+- Financial forecasting (Expected Revenue).
+
+## Architecture
+- **Model:** `Lead.php` (Entity definition)
+- **Validator:** `LeadValidator.php` (Strict business rule validation)
+- **Repository:** `LeadRepository.php` (Complex PDO logic, tenant isolated)
+- **Service:** `LeadService.php` (Business layer orchestration)
+- **Controller:** `LeadController.php` (HTTP interface)
+
+## UI
+- Bootstrap 5 offcanvas/modal forms.
+- DataTables for searching/sorting (to be implemented via layout).
+- Aggregate metrics cards.
+
+## Future Improvements
+- Integrate PHPMailer to send welcome emails on 'Qualified' stage.
+- Add activity logging for state transitions.
+MD;
+file_put_contents($moduleDir . '/README.md', $docsContent);
+
+echo "Elite CRM module built successfully.\n";

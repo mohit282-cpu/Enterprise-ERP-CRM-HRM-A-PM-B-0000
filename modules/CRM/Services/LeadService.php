@@ -1,29 +1,38 @@
 <?php
 namespace Modules\CRM\Services;
 
-use App\Core\BaseService;
 use Modules\CRM\Repositories\LeadRepository;
+use Modules\CRM\Validators\LeadValidator;
+use Exception;
 
-class LeadService extends BaseService {
-    private LeadRepository $repo;
-    
-    public function __construct(LeadRepository $repo) {
-        $this->repo = $repo;
+class LeadService {
+    private $repo;
+
+    public function __construct() {
+        $this->repo = new LeadRepository();
     }
-    
-    public function getAllRecords() {
+
+    public function getLeads() {
         return $this->repo->getAll();
     }
 
-    public function createRecord(array $data) {
+    public function createLead(array $data) {
+        $errors = LeadValidator::validate($data);
+        if (!empty($errors)) {
+            throw new Exception(implode(', ', $errors));
+        }
         return $this->repo->create($data);
     }
 
-    public function updateRecord(int $id, array $data) {
+    public function updateLead(int $id, array $data) {
+        $errors = LeadValidator::validate($data);
+        if (!empty($errors)) {
+            throw new Exception(implode(', ', $errors));
+        }
         return $this->repo->update($id, $data);
     }
-    
-    public function deleteRecord(int $id) {
+
+    public function deleteLead(int $id) {
         return $this->repo->delete($id);
     }
 }
