@@ -39,7 +39,7 @@ INSERT OR IGNORE INTO tenants (id, name, subdomain, plan) VALUES (2, 'Stark Indu
 
 -- Password is 'password123' (bcrypt hash)
 INSERT OR IGNORE INTO users (id, tenant_id, first_name, last_name, email, password_hash, role) 
-VALUES (1, 1, 'John', 'Doe', 'john@acme.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
+VALUES (1, 1, 'John', 'Doe', 'john@acme.com', '$2y$10$ADr2TWFDfWmdDmWEeC85BeQBOqaY7Suf7WOqNZ2AI7Slq3kS8Qceu', 'admin');
 
 INSERT OR IGNORE INTO users (id, tenant_id, first_name, last_name, email, password_hash, role) 
-VALUES (2, 2, 'Tony', 'Stark', 'tony@stark.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
+VALUES (2, 2, 'Tony', 'Stark', 'tony@stark.com', '$2y$10$ADr2TWFDfWmdDmWEeC85BeQBOqaY7Suf7WOqNZ2AI7Slq3kS8Qceu', 'admin');
