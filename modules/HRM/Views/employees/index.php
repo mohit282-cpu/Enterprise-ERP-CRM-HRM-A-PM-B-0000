@@ -1,6 +1,6 @@
 <div class="row mb-4">
     <div class="col-12 d-flex justify-content-between align-items-center">
-        <h4 class="fw-bold tracking-tight mb-0">Projects</h4>
+        <h4 class="fw-bold tracking-tight mb-0">Employees</h4>
         <button class="btn btn-primary"><i class="fas fa-plus me-2"></i> Add New</button>
     </div>
 </div>
@@ -12,20 +12,22 @@
                 <thead class="bg-light">
                     <tr>
                         <th class="ps-4">ID</th>
-                        <th>Name</th>
-<th>Status</th>
-<th>Progress</th>
+                        <th>First Name</th>
+<th>Last Name</th>
+<th>Department</th>
+<th>Role</th>
 
                         <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(!empty($projects)): foreach($projects as $row): ?>
+                    <?php if(!empty($employees)): foreach($employees as $row): ?>
                     <tr>
                         <td class="ps-4">#<?= htmlspecialchars($row['id'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($row['name'] ?? '') ?></td>
-<td><?= htmlspecialchars($row['status'] ?? '') ?></td>
-<td><?= htmlspecialchars($row['progress'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['first_name'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['last_name'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['department'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['role'] ?? '') ?></td>
 
                         <td class="text-end pe-4">
                             <button class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-edit"></i></button>

@@ -1,6 +1,6 @@
 <div class="row mb-4">
     <div class="col-12 d-flex justify-content-between align-items-center">
-        <h4 class="fw-bold tracking-tight mb-0">Projects</h4>
+        <h4 class="fw-bold tracking-tight mb-0">Hosting Accounts</h4>
         <button class="btn btn-primary"><i class="fas fa-plus me-2"></i> Add New</button>
     </div>
 </div>
@@ -12,20 +12,20 @@
                 <thead class="bg-light">
                     <tr>
                         <th class="ps-4">ID</th>
-                        <th>Name</th>
+                        <th>Domain</th>
+<th>Plan</th>
 <th>Status</th>
-<th>Progress</th>
 
                         <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(!empty($projects)): foreach($projects as $row): ?>
+                    <?php if(!empty($accounts)): foreach($accounts as $row): ?>
                     <tr>
                         <td class="ps-4">#<?= htmlspecialchars($row['id'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($row['name'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['domain'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['plan'] ?? '') ?></td>
 <td><?= htmlspecialchars($row['status'] ?? '') ?></td>
-<td><?= htmlspecialchars($row['progress'] ?? '') ?></td>
 
                         <td class="text-end pe-4">
                             <button class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-edit"></i></button>
