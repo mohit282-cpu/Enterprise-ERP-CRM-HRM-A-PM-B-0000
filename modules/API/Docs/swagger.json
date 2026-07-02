@@ -1,0 +1,48 @@
+﻿{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sovryx OS Global API",
+    "description": "Comprehensive REST API spanning CRM, Accounting, HRM, Projects, Inventory, and Hosting.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Main Production Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/me": {
+      "get": {
+        "summary": "Get authenticated user profile",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": { "description": "Success" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/crm/leads": {
+      "get": {
+        "summary": "List all CRM leads",
+        "tags": ["CRM"],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    }
+  }
+}
