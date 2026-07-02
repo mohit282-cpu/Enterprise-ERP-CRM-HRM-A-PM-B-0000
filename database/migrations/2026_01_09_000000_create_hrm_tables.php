@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateHrmTables {
     public function up($db) {
         $sql = "

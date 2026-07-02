@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class CreateMasterDataTables {
     public function up($db) {

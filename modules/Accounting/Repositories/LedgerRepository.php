@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Accounting\Repositories;
 use Modules\Accounting\Models\ChartOfAccount;
 use PDO;

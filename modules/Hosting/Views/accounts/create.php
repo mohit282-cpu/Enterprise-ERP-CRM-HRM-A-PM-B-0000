@@ -1,4 +1,4 @@
-﻿<!-- Basic scaffolding view for creating an account -->
+<!-- Basic scaffolding view for creating an account -->
 <h2>Provision New Hosting Account</h2>
 <form method="POST">
     <!-- Fields will go here -->

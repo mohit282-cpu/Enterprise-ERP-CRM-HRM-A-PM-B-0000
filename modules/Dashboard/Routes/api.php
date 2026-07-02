@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 use Modules\Dashboard\Controllers\ApiDashboardController;
 
 return [

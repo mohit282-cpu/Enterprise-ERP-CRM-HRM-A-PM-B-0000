@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Hosting\Services;
 use Modules\Hosting\Repositories\HostingAccountRepository;
 use Exception;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Tests\API;
 
 use Tests\TestCase;

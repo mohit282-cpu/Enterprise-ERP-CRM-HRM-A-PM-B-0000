@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class CreateOperationalTables {
     public function up($db) {

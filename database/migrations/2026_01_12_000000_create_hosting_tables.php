@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateHostingTables {
     public function up($db) {
         $sql = "

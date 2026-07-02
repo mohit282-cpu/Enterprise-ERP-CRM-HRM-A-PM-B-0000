@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\HRM\Controllers;
 use App\Core\BaseController;
 use Modules\HRM\Services\TimeTrackingService;

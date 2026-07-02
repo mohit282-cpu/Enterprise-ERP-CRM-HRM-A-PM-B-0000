@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class AuthSeeder {
     public function run($db) {

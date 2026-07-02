@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Billing\Services;
 use Modules\Billing\Repositories\InvoiceRepository;
 

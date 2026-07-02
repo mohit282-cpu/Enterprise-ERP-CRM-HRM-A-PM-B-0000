@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class CreateAuthTables {
     public function up($db) {

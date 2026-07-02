@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Domains\Controllers;
 use App\Core\BaseController;
 use Modules\Domains\Repositories\DomainRepository;

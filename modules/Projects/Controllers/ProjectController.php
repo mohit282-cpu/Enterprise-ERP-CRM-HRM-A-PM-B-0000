@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Projects\Controllers;
 use App\Core\BaseController;
 use Modules\Projects\Services\ProjectService;

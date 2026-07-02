@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Accounting\Services;
 use Modules\Accounting\Repositories\JournalRepository;
 use Exception;

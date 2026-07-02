@@ -1,1 +1,1 @@
-﻿<?php return [ 'GET /security' => [Modules\Security\Controllers\SecurityCenterController::class, 'index'], 'GET /security/audit-logs' => [Modules\Security\Controllers\SecurityCenterController::class, 'auditLogs'] ];
+<?php return [ 'GET /security' => [Modules\Security\Controllers\SecurityCenterController::class, 'index'], 'GET /security/audit-logs' => [Modules\Security\Controllers\SecurityCenterController::class, 'auditLogs'] ];

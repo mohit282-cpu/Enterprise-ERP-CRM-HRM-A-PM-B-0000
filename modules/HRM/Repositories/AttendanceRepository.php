@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\HRM\Repositories;
 use Modules\HRM\Models\Attendance;
 use PDO;

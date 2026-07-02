@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Reports\Controllers;
 use App\Core\BaseController;
 use Modules\Reports\Services\AnalyticsService;

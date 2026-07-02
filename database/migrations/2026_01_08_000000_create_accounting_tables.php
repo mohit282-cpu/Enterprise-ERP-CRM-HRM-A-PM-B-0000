@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateAccountingTables {
     public function up($db) {
         $sql = "

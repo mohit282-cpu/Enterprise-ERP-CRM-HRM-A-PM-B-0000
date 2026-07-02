@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateCrmTables {
     public function up($db) {
         $sql = "

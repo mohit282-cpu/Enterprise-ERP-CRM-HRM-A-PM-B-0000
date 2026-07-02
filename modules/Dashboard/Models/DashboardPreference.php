@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Dashboard\Models;
 use App\Core\BaseModel;
 

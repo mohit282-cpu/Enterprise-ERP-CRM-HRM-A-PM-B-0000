@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Hosting\Repositories;
 use Modules\Hosting\Models\HostingAccount;
 use PDO;

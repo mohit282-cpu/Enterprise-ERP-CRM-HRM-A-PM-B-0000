@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use PHPUnit\Framework\TestCase;
 use Modules\Authentication\Services\AuthService;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class CreateFinanceTables {
     public function up($db) {

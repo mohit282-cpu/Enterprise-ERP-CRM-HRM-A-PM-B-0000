@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Accounting\Controllers;
 use App\Core\BaseController;
 use Modules\Accounting\Services\AccountingService;

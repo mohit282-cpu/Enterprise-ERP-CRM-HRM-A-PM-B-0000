@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Dashboard\Controllers;
 
 use App\Core\BaseController;

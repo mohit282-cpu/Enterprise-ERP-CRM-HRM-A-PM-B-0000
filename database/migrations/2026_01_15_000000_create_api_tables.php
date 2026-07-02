@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateApiTables {
     public function up($db) {
         $sql = "

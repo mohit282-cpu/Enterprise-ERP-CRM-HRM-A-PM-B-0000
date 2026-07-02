@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateDashboardTables {
     public function up($db) {
         $sql = "

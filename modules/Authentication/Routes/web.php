@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use Modules\Authentication\Controllers\AuthController;
 use Modules\Authentication\Controllers\RegisterController;

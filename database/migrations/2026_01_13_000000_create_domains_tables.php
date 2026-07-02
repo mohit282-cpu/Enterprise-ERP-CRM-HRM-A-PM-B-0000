@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateDomainsTables {
     public function up($db) {
         $sql = "

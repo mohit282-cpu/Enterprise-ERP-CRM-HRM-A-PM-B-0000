@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Security\Controllers;
 use App\Core\BaseController;
 use App\Core\Database;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Inventory\Repositories;
 use Modules\Inventory\Models\InventoryStock;
 use PDO;

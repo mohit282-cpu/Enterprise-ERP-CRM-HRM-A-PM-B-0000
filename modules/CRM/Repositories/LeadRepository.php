@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\CRM\Repositories;
 use Modules\CRM\Models\Lead;
 use PDO;

@@ -1,1 +1,1 @@
-﻿<?php return [ 'GET /billing/invoices' => [Modules\Billing\Controllers\InvoiceController::class, 'index'], 'POST /billing/invoices' => [Modules\Billing\Controllers\InvoiceController::class, 'create'] ];
+<?php return [ 'GET /billing/invoices' => [Modules\Billing\Controllers\InvoiceController::class, 'index'], 'POST /billing/invoices' => [Modules\Billing\Controllers\InvoiceController::class, 'create'] ];

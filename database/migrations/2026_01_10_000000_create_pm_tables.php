@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreatePmTables {
     public function up($db) {
         $sql = "

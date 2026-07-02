@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\CRM\Controllers;
 use App\Core\BaseController;
 use Modules\CRM\Services\LeadService;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Inventory\Controllers;
 use App\Core\BaseController;
 use Modules\Inventory\Services\InventoryManagerService;

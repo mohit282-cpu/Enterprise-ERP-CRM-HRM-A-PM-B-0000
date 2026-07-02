@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Inventory\Services;
 use Modules\Inventory\Repositories\StockRepository;
 use Exception;

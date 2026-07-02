@@ -1,4 +1,4 @@
-﻿<div class="card shadow-sm h-100">
+<div class="card shadow-sm h-100">
     <div class="card-header bg-white">
         <h5 class="mb-0">Recent Activity</h5>
     </div>

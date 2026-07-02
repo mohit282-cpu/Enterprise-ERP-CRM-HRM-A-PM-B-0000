@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Reports\Repositories;
 use App\Core\Database;
 use PDO;

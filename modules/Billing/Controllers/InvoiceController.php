@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Billing\Controllers;
 use App\Core\BaseController;
 use Modules\Billing\Services\InvoiceService;

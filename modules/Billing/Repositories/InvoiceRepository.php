@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Billing\Repositories;
 use Modules\Billing\Models\Invoice;
 use PDO;

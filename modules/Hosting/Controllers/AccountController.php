@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Hosting\Controllers;
 use App\Core\BaseController;
 use Modules\Hosting\Services\ProvisioningService;

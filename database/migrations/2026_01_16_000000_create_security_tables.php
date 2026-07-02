@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateSecurityTables {
     public function up($db) {
         $sql = "

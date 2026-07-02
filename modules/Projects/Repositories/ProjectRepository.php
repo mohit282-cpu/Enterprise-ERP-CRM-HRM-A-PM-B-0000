@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Projects\Repositories;
 use Modules\Projects\Models\Project;
 use PDO;

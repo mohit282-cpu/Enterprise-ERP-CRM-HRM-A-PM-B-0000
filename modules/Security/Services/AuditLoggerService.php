@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Modules\Security\Services;
 use App\Core\Database;
 

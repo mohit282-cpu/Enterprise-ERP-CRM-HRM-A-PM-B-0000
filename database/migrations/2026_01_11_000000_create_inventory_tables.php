@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 class CreateInventoryTables {
     public function up($db) {
         $sql = "
